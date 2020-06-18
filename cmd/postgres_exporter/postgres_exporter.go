@@ -1574,8 +1574,10 @@ func getDataSources() []string {
 				panic(err)
 			}
 			user = strings.TrimSpace(string(fileContents))
+		} else if len(os.Getenv("DATA_SOURCE_USER")) != 0 {
+			pass = os.Getenv("DATA_SOURCE_USER")
 		} else {
-			user = os.Getenv("DATA_SOURCE_USER")
+			user = os.Getenv("POSTGRES_USER")
 		}
 
 		if len(os.Getenv("DATA_SOURCE_PASS_FILE")) != 0 {
@@ -1584,8 +1586,10 @@ func getDataSources() []string {
 				panic(err)
 			}
 			pass = strings.TrimSpace(string(fileContents))
-		} else {
+		} else if len(os.Getenv("DATA_SOURCE_PASS")) != 0 {
 			pass = os.Getenv("DATA_SOURCE_PASS")
+		} else {
+			pass = os.Getenv("POSTGRES_PASSWORD")
 		}
 
 		ui := url.UserPassword(user, pass).String()
